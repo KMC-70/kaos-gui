@@ -1,33 +1,33 @@
-.App {
-  text-align: center;
+.app {
+  text-align: left;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.map-container {
+  width: 80%;
+  overflow: None;
+  float: left;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.mapMarkerStyle {
+  background-color: rgb(255, 0, 191);
+  width: 1.5rem;
+  height: 1.5rem;
+  display: block;
+  left: -.75rem;
+  top: -1.5rem;
+  position: relative;
+  border-radius: 1.5rem 1.5rem 0;
+  transform: rotate(45deg);
+  border: 1px solid rgb(0, 0, 0);
 }
 
-.App-link {
-  color: #61dafb;
+.mapBox {
+  grid-column: span 3;
+  overflow: hidden;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.panelBox {
+  grid-column: span 1;
 }
