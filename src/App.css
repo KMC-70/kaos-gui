@@ -1,17 +1,26 @@
 .app {
+  width: 100%;
+  height: 100%;
   text-align: left;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  display: flex;
 }
 
-.map-container {
-  width: 80%;
-  overflow: None;
-  float: left;
+.map-box {
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow: hidden;
+}
+
+.panel-box {
+  flex-basis: 330px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  height: 100%;
+  overflow-y: scroll;
 }
 
 .mapMarkerStyle {
-  background-color: rgb(255, 0, 191);
+  background-color: rgb(255, 0, 76);
   width: 1.5rem;
   height: 1.5rem;
   display: block;
@@ -21,13 +30,4 @@
   border-radius: 1.5rem 1.5rem 0;
   transform: rotate(45deg);
   border: 1px solid rgb(0, 0, 0);
-}
-
-.mapBox {
-  grid-column: span 3;
-  overflow: hidden;
-}
-
-.panelBox {
-  grid-column: span 1;
 }

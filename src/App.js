@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import axios from 'axios'
 
 import './App.css';
 
@@ -11,76 +10,91 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.apiURL = process.env.REACT_APP_API_URL;
+
     // initialize the state
     this.state = {
-      longitude: -123.250,
-      latitude: 49.2623,
-      startTime: moment(),
-      endTime: moment().add(1, 'days'),
-      result: null,
+      coordinates: {
+        longitude: -123.250,
+        latitude: 49.2623,
+      },
+      timeInterval: {
+        startTime: moment(),
+        endTime: moment().add(1, 'days'),
+      },
+      satellites: {},
+      selectedSatellites: [],
+      requestJSON: null,
     }
   }
 
   onMapClick = (clickEvent) => {
     const [longitude, latitude] = clickEvent.lngLat;
     this.setState({
-      longitude: longitude,
-      latitude: latitude
+      coordinates: {
+        longitude: longitude,
+        latitude: latitude
+      }
     })
   }
 
   onTimeUpdate = (moment, startOrEnd) => {
+    const old = this.state.timeInterval;
     this.setState({
-      [startOrEnd]: moment,
+      timeInterval: {
+        ...old,
+        [startOrEnd]: moment,
+      }
     });
   }
 
+  onSatelliteUpdate = (selection) => {
+    this.setState({
+      selectedSatellites: selection,
+    })
+  }
+
   onSearchButtonClick = () => {
-    const startTime = moment.utc(this.state.startTime).format();
-    const endTime = moment.utc(this.state.endTime).format();
+    const startTime = moment.utc(this.state.timeInterval.startTime).format();
+    const endTime = moment.utc(this.state.timeInterval.endTime).format();
+    const platformID = this.state.selectedSatellites.map(x => x.value);
 
-    // moment formats the times with a "Z" at the end to indicate UTC time
+    // note: moment formats the times with a "Z" at the end to mean "UTC time"
     // we need to get rid of that before POSTing the request
-
-    const request = JSON.stringify({
+    const request = {
       "POI": {
         "startTime": startTime.slice(0, startTime.length - 1),
         "endTime": endTime.slice(0, startTime.length - 1),
       },
       "Target": [
-        this.state.longitude, this.state.latitude
+        this.state.coordinates.longitude, this.state.coordinates.latitude
       ],
-    });
+      "PlatformID": platformID.length ? platformID : null,
+    };
 
-    // post this to ptsv2 as a test
-    const url = "http://ptsv2.com/t/apcgf-1552269155/post"
-    axios.post(url, request).then((response) => {
-      console.log(response);
-      alert(request);
-    }, (error) => {
-      console.log(error);
-      alert(request);
-    });
+    this.setState({requestJSON: JSON.stringify(request)});
   }
 
   render() {
     return (
       <div className="app">
-        <div className="mapBox">
+        <div className="map-box">
           <Map 
-            longitude = {this.state.longitude}
-            latitude = {this.state.latitude}
+            longitude = {this.state.coordinates.longitude}
+            latitude = {this.state.coordinates.latitude}
             onClick = {this.onMapClick}
           />
         </div>
-        <div className="panelBox">
+        <div className="panel-box">
           <Panel 
-            longitude = {this.state.longitude}
-            latitude = {this.state.latitude}
-            startTime = {this.state.startTime}
-            endTime = {this.state.endTime}
+            coordinates = {this.state.coordinates}
+            timeInterval = {this.state.timeInterval}
+            selectedSatellites = {this.state.selectedSatellites}
             onTimeUpdate = {this.onTimeUpdate}
             onSearchButtonClick = {this.onSearchButtonClick}
+            onSatellitesFetched = {this.onSatellitesFetched}
+            onSatelliteUpdate = {this.onSatelliteUpdate}
+            requestJSON = {this.state.requestJSON}
           />
         </div>
       </div>

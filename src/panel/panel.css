@@ -1,0 +1,75 @@
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css');
+
+.panel-container {
+    width: 100%;
+    padding: 0em 1rem;
+    font-size: 12px;
+    margin: auto;
+}
+
+.panel-header {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 1rem 0rem 0.6rem;
+}
+
+.panel-row {
+    width: 100%;
+    padding: 0.2rem 0rem;
+    display: flex;
+}
+
+.panel-row-left {
+    flex-basis: 50px;
+}
+
+.panel-row > div {
+    flex-grow: 1;
+}
+
+.panel-search-btn {
+    display: block;
+    margin: 1rem auto;
+    width: 100%;
+    background-color: #13ccbd;
+    border: none;
+    color: white;
+    padding: 0.8rem;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.result-spinner-container {
+    margin: 0.5rem auto;
+    text-align: center;
+    color: #13ccbd;
+}
+
+.result-error-container {
+    color: #D8000C;
+    background-color: #FFBABA;
+    border: 1px solid;
+    margin: 1rem auto;
+    padding: 1rem;
+}
+
+.result-error-close-btn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 1.2rem;
+    line-height: 0.8rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+  
+.result-error-close-btn:hover {
+    color: black;
+}
+
+.result-success-container {
+    margin: 0.5rem auto;
+}
