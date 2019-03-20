@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
-import './mapbox-gl.css';
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 export default class Map extends React.Component {
   constructor(props) {
