@@ -12,11 +12,10 @@
 }
 
 .panel-box {
-  flex-basis: 330px;
+  flex-basis: 320;
   flex-shrink: 0;
   flex-grow: 0;
   height: 100%;
-  overflow-y: scroll;
 }
 
 .mapMarkerStyle {
