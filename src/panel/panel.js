@@ -24,7 +24,7 @@ class Panel extends React.Component {
 
       // search states
       searching: false,
-      error: false,
+      errorMessage: null,
     }
 
     this.getSatellites();
@@ -35,7 +35,8 @@ class Panel extends React.Component {
    * component initialization.
    */
   getSatellites() {
-    const url = `${process.env.REACT_APP_API_URL}/satellite`;
+    const url = `${process.env.REACT_APP_API_URL}/satellites`;
+    console.log(url);
     axios.get(url).then((response) => {
       console.log(response);
 
@@ -57,7 +58,7 @@ class Panel extends React.Component {
   }
 
   clearError = () => {
-    this.setState({error: false});
+    this.setState({errorMessage: null});
   }
 
   /**
@@ -85,17 +86,30 @@ class Panel extends React.Component {
    * POST the search request. Pass result back to the app.
    */
   onSearchButtonClick = () => {
-    this.setState({searching: true, error: false});
+    // check: is the viewing interval valid?
+    const startTime = this.state.startTime;
+    const endTime = this.state.endTime;
+    if (!startTime.isBefore(endTime)) {
+      this.setState({errorMessage: "Start time must be before end time!"});
+      return;
+    } else if (endTime.diff(startTime, 'hours') > 72) {
+      this.setState({
+        errorMessage: "Sorry, my overlords have disabled the ability to perform searches longer than 3 days for this demo",
+      });
+      return;
+    }
+
+    this.setState({searching: true, errorMessage: null});
     const url = `${process.env.REACT_APP_API_URL}/visibility/search`;
 
     // form the request
-    const startTime = moment.utc(this.state.startTime).format();
-    const endTime = moment.utc(this.state.endTime).format();
+    const startStr = moment.utc(startTime).format().split('-').join('');
+    const endStr = moment.utc(endTime).format().split('-').join('');
     const platforms = this.state.selectedSatellites.map(x => x.value);
     const requestData = {
       "POI": {
-        "startTime": startTime.slice(0, startTime.length - 1),
-        "endTime": endTime.slice(0, startTime.length - 1),
+        "startTime": startStr.slice(0, startStr.length - 1) + '.000',
+        "endTime": endStr.slice(0, endStr.length - 1) + '.000',
       },
       "Target": [
         this.props.longitude, this.props.latitude,
@@ -103,7 +117,7 @@ class Panel extends React.Component {
       "PlatformID": platforms.length > 0 ? platforms : null,
     }
 
-    console.log(requestData);
+    console.log(JSON.stringify(requestData));
     axios.post(url, requestData).then((response) => {
       console.log(response);
       if (response.data.Opportunities.length > 0) {
@@ -121,7 +135,8 @@ class Panel extends React.Component {
       }
     }).catch((error) => {
       console.log(error);
-      this.setState({error: true})
+      console.log(error.response);
+      this.setState({errorMessage: "Something went wrong with the search"})
     }).finally(() => {
       this.setState({searching: false});
     });
@@ -166,7 +181,7 @@ class Panel extends React.Component {
           />
           <SearchButton
             isSearching = {this.state.searching}
-            hasError = {this.state.error}
+            errorMessage = {this.state.errorMessage}
             clearError = {this.clearError}
             onSearchButtonClick = {this.onSearchButtonClick}
           />

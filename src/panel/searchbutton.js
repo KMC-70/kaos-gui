@@ -46,7 +46,7 @@ class SearchButton extends React.Component {
   }
 
   renderError() {
-    if (!this.props.hasError) {
+    if (this.props.errorMessage === null) {
       return null;
     }
 
@@ -56,7 +56,7 @@ class SearchButton extends React.Component {
           className="result-error-close-btn" 
           onClick={this.props.clearError}
         >&times;</span>
-      Didn't find any opportunities :(
+      {this.props.errorMessage}
       </div>
     );
   }

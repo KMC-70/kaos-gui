@@ -14,8 +14,8 @@ class ResultModal extends React.Component {
     const formatStr = "MMMM Do YYYY, h:mm:ss a";
     
     return this.props.results.map((x, i) => {
-      const start = moment(x.OpportunityWindow[0]).format(formatStr);
-      const end = moment(x.OpportunityWindow[1]).format(formatStr);
+      const start = moment.unix(x.start_time).format(formatStr);
+      const end = moment.unix(x.end_time).format(formatStr);
       const window = `${start} to ${end}`;
       return (
         <tr key={i}>
