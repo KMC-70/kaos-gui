@@ -18,6 +18,12 @@ REACT_APP_API_URL = http://kaos.backend.api
 REACT_APP_MAP_API_KEY = your API token
 ```
 
+Install dependencies:
+
+```
+npm install
+```
+
 Run KAOS locally:
 
 ```
